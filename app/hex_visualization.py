@@ -195,18 +195,7 @@ def _draw_misplaced(
             cv.arrowedLine(canvas, (start_x, start_y), (tx, ty),
                           color, 2, cv.LINE_AA, tipLength=0.15)
 
-    # 旋转量标注（在格子上方）
-    if pl.rotation > 0:
-        rot_text = f"rot {pl.rotation * 60}deg"
-        font = cv.FONT_HERSHEY_SIMPLEX
-        scale = 0.45
-        (tw, th), _ = cv.getTextSize(rot_text, font, scale, 1)
-        tx_txt = cx - tw // 2
-        ty_txt = cy - int(r) - 5
-        cv.rectangle(canvas, (tx_txt - 2, ty_txt - th - 2), (tx_txt + tw + 2, ty_txt + 2),
-                     (20, 20, 20), -1)
-        cv.putText(canvas, rot_text, (tx_txt, ty_txt), font, scale,
-                   (255, 255, 200), 1, cv.LINE_AA)
+    # 旋转量标注已移除（碎片方向固定）
 
 
 def _draw_legend(canvas: np.ndarray, placements: list[HexPlacement]) -> None:
@@ -218,10 +207,9 @@ def _draw_legend(canvas: np.ndarray, placements: list[HexPlacement]) -> None:
         f"Misplaced: {n} pieces",
     ]
     for idx, pl in enumerate(placements):
-        rot_str = f" ↻{pl.rotation * 60}°" if pl.rotation > 0 else ""
         lines.append(
             f"  #{idx+1}: ({pl.misplaced_cell.q},{pl.misplaced_cell.r})"
-            f" → ({pl.target_q},{pl.target_r}){rot_str}"
+            f" -> ({pl.target_q},{pl.target_r})"
             f"  conf={pl.score:.0%}"
         )
 
